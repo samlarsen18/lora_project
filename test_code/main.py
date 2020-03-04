@@ -7,9 +7,7 @@ import pycom
 
 class config_template:
     APP_KEY = "F55D18E92BEB28624993A1CCD35D86AE"  # Application key from the things network SAM
-    # APP_KEY = "FD787534B6AE2B2704E4FDB5B3644036" # Terrance
     APP_EUI = "70B3D57ED002B40D"  # The EUI for the app SAM
-    # APP_EUI = "70B3D57ED002B613" # Terrance
     DEV_EUI = "70b3d5499f8c89ba"
     JOIN_TIMEOUT = 30  # passed to the LoRaWAN join function.
     
@@ -46,7 +44,7 @@ lora.join(activation=LoRa.OTAA, auth=(dev_eui, app_eui, app_key), timeout=0)
 count = 0 
 while not lora.has_joined():
     time.sleep(2.5)
-    print('Not yet joined...'+ str(count))
+    print('Not yet...'+ str(count))
     count += 1
 
 pycom.rgbled(0x000500)  # Make the LED green
@@ -61,13 +59,11 @@ s.setsockopt(socket.SOL_LORA, socket.SO_DR, 3)
 # (waits for the data to be sent and for the 2 receive windows to expire)
 s.setblocking(True)
 
-# send some data
-s.send(bytes([0x01, 0x02, 0x03]))
-
-# make the socket non-blocking
-# (because if there's no data received it will block forever...)
-s.setblocking(False)
-
-# get any data received (if any...)
-data = s.recv(64)
-print(data)
+while True:
+    pycom.rgbled(0x000500)  # Make the LED green
+    s.send(bytes([0x01, 0x02, 0x03]))
+    time.sleep(.5)
+    pycom.rgbled(0x5)  # Make the LED green
+    time.sleep(.5)
+    # data = s.recv(64)
+    # print(data)
