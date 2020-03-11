@@ -66,7 +66,9 @@ mqtt_client.set_connect_callback(connect_callback)
 mqtt_client.set_downlink_callback(downlink_callback)
 mqtt_client.connect()
 
-time.sleep(180)
+# time.sleep(180)
+while True:
+  time.sleep(10)
 mqtt_client.close()
 
 # using application manager client
