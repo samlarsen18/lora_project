@@ -15,38 +15,31 @@ import os
 import time
 import utime
 import gc
-from lora_functions import Lora
 from machine import RTC
 from machine import SD
 from L76GNSS import L76GNSS
 from pytrack import Pytrack
-from network import LoRa
-import socket
-import ubinascii
-import pycom
 
-# time.sleep(2)
+time.sleep(2)
 gc.enable()
 
 # setup rtc
 rtc = machine.RTC()
 rtc.ntp_sync("pool.ntp.org")
+utime.sleep_ms(750)
+print('\nRTC Set from NTP to UTC:', rtc.now())
+utime.timezone(7200)
+print('Adjusted from UTC to EST timezone', utime.localtime(), '\n')
 
 py = Pytrack()
 l76 = L76GNSS(py, timeout=30)
-lora = Lora()
-lora.connect()
-# lora.send('Hello World')
+
+# sd = SD()
+# os.mount(sd, '/sd')
+# f = open('/sd/gps-record.txt', 'w')
+
 while (True):
+    l76
     coord = l76.coordinates(True)
-    # print(str(coord))
-    lora.send(str(coord))
-    print("{} - {}".format(coord, rtc.now()))
-    if "None" not in str(coord):
-        pycom.rgbled(0x0000FF)  # Make the LED blue
-        time.sleep(.25)
-        pycom.rgbled(0xf00)  # Happy State
-    else:    
-        pycom.rgbled(0xFF0000)  # Make the LED red
-        time.sleep(.25)
-        pycom.rgbled(0xf0a500)  # Bad state
+    #f.write("{} - {}\n".format(coord, rtc.now()))
+    print("{} - {} - {}".format(coord, rtc.now(), gc.mem_free()))
