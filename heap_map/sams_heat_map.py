@@ -21,7 +21,7 @@ longitudes = data["long"]
 # Creating the location we would like to initialize the focus on.
 # Parameters: Lattitude, Longitude, Zoom
 gmap = gmplot.GoogleMapPlotter(40.24717, -111.6477, 16)
-gmap.apikey = "AIzaSyD6tQu22WCfM-G7MMueBVBoLmd9gfkHM5s"
+gmap.apikey = "AIzaSyDfROz_FxGBcOxdcNHk70mNAy9TWiY3rUc"
 # Overlay our datapoints onto the map
 gmap.heatmap(latitudes, longitudes)
 
