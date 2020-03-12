@@ -17,48 +17,63 @@ sql_create_projects_table = """CREATE TABLE IF NOT EXISTS gps_coords (
 
 
 def set_up_db():
-  try:
-    conn = sqlite3.connect('gps_data.sqlite')
-    # my_conn.close()
-  except:
-    print("Something went wrong")
-  cur = conn.cursor()
-  cur.execute(sql_create_projects_table)
-  conn.commit()
-  conn.close()
+    try:
+        conn = sqlite3.connect('../lora_server/gps_data.sqlite')
+        # my_conn.close()
+    except:
+        print("Something went wrong")
+    cur = conn.cursor()
+    cur.execute(sql_create_projects_table)
+    conn.commit()
+    conn.close()
 
 
-#Establish Connection
-conn = sqlite3.connect("gps_data.sqlite")
+def adjust_by_120(x):
+    return x + 120
+
+
+def make_negative(x):
+    return x * (-1)
+
+
+# Establish Connection
+conn = sqlite3.connect("../lora_server/gps_data.sqlite")
 cur = conn.cursor()
 sql_data = pd.read_sql_query("SELECT * FROM gps_coords WHERE lat != 'None'", conn)
 
-#Close Connection
+# Close Connection
 conn.commit()
 conn.close()
 
+# Format Data
+sql_data["long"] = sql_data["long"].apply(make_negative)
 latitudes = sql_data["lat"]
 longitudes = sql_data["long"]
-locations = sql_data["lat", "long"]
-snr = sql_data["snr"]
-print(longitudes.size)
-print(snr.size)
-#gmap = gmplot.GoogleMapPlotter(40.2463927, -111.6541367,5)
-#gmap.apikey = "ahtzklvqnkewqhet"
-#gmap.heatmap(latitudes, longitudes, snr)
+print(longitudes)
+locations = sql_data[['lat', 'long']]
+sql_data["rssi"] = sql_data["rssi"].apply(adjust_by_120)
+rssi = sql_data["rssi"]
+print(rssi)
+figure_layout = {
+    'width': '100%',
+    'height': '840px'
+}
 
-#gmap.draw("gps_heatmap.html")
+byu_coordinates = (40.247118312166805, -111.6482334121247)
+fig = gmaps.figure(map_type='SATELLITE',
+                   layout=figure_layout,
+                   center=byu_coordinates,
+                   zoom_level=16.5)
 
-fig = gmaps.figure()
 heatmap_layer = gmaps.heatmap_layer(
-  locations, weights=snr,
-  max_intensity=30, point_radius=3.0
+    locations, weights=rssi,
+    max_intensity=100, point_radius=10.0
 )
 fig.add_layer(heatmap_layer)
 
-embed_minimal_html('weighted_heatmap.html',views=[fig])
-#print(latitudes)
-#print(longitudes)
+embed_minimal_html('weighted_heatmap.html', views=[fig])
+# print(latitudes)
+# print(longitudes)
 """
 # Let's limit the dataset to the first 15,000 records for this example
 data = raw_data.head(n=15000)
@@ -78,10 +93,6 @@ gmap.heatmap(latitudes, longitudes)
 gmap.draw("my_heatmap.html")
 
 """
-
-
-
-
 
 """raw_data = pd.read_csv("Addresses_in_the_City_of_Los_Angeles.csv")
 
