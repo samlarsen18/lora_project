@@ -21,7 +21,9 @@ def uplink_callback(msg, client):
 
   #Parse payload
   lat = base64.b64decode(msg.payload_raw).decode().split()[0][1:-1]
-  lng =  base64.b64decode(msg.payload_raw).decode().split()[1][1:-1]
+  if ("None" in lat):
+    return
+  lng =  base64.b64decode(msg.payload_raw).decode().split()[1][0:-1]
   time = msg.metadata.time
   rssi = msg.metadata.gateways[0].rssi
   snr = msg.metadata.gateways[0].snr
