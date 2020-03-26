@@ -4,18 +4,20 @@ import gmplot
 # For improved table display in the notebook
 from IPython.display import display
 
-raw_data = pd.read_csv("coord_1.csv")
+raw_data = pd.read_csv("coord_3.csv")
 
 # Success! Display the first 5 rows of the dataset
 display(raw_data.head(n=5))
 display(raw_data.info())
 
 # Let's limit the dataset to the first 15,000 records for this example
-data = raw_data.head(n=200)
+data = raw_data.head(n=400)
 
 # Store our latitude and longitude
 latitudes = data["lat"]
 longitudes = data["long"]
+print(longitudes)
+
 # latitudes.remove("Done")
 
 # Creating the location we would like to initialize the focus on.
@@ -23,7 +25,7 @@ longitudes = data["long"]
 gmap = gmplot.GoogleMapPlotter(40.24717, -111.6477, 16)
 gmap.apikey = "AIzaSyDfROz_FxGBcOxdcNHk70mNAy9TWiY3rUc"
 # Overlay our datapoints onto the map
-gmap.heatmap(latitudes, longitudes)
-
+ret = gmap.heatmap(latitudes, longitudes)
+print(ret)
 # Generate the heatmap into an HTML file
 gmap.draw("my_heatmap.html")
