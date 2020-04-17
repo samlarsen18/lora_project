@@ -50,3 +50,7 @@ while (True):
         pycom.rgbled(0xFF0000)  # Make the LED red
         time.sleep(.25)
         pycom.rgbled(0xf0a500)  # Bad state
+
+    if(lora.getStatus()):
+        pycom.rgbled(0xF0F000)  # Bad state
+
