@@ -4,14 +4,14 @@ import gmplot
 # For improved table display in the notebook
 from IPython.display import display
 
-raw_data = pd.read_csv("coord.csv")
+raw_data = pd.read_csv("coord_3.csv")
 
 # Success! Display the first 5 rows of the dataset
 display(raw_data.head(n=5))
 display(raw_data.info())
 
 # Let's limit the dataset to the first 15,000 records for this example
-data = raw_data.head(n=200)
+data = raw_data.head(n=5000)
 
 # Store our latitude and longitude
 latitudes = data["lat"]
