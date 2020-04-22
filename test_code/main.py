@@ -6,9 +6,10 @@ import pycom
 # import config_template
 
 class config_template:
-    APP_KEY = "F55D18E92BEB28624993A1CCD35D86AE"  # Application key from the things network SAM
-    APP_EUI = "70B3D57ED002B40D"  # The EUI for the app SAM
-    DEV_EUI = "70b3d5499f8c89ba"
+    # Update these values! 
+    APP_KEY = "APP KEY"  # Application key from the things network SAM
+    APP_EUI = "APP EUI"  # The EUI for the app SAM
+    DEV_EUI = "DEV EUI"
     JOIN_TIMEOUT = 30  # passed to the LoRaWAN join function.
     
 config = config_template()
